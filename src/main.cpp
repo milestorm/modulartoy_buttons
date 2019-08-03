@@ -4,8 +4,10 @@
 #include "tools.h"
 #include "flasher.h"
 
+// BUTTON GAME START
+
 OneButton myButtons[] = {OneButton(BUTT_RED, true), OneButton(BUTT_GREEN, true), OneButton(BUTT_BLUE, true), OneButton(BUTT_YELLOW, true)};
-Flasher myLeds[] = {Flasher(LED_RED, 300, 300), Flasher(LED_GREEN, 300, 300), Flasher(LED_BLUE, 300, 300), Flasher(LED_YELLOW, 300, 300)};
+Flasher myLeds[] = {Flasher(BUTT_LED_RED, 300, 300), Flasher(BUTT_LED_GREEN, 300, 300), Flasher(BUTT_LED_BLUE, 300, 300), Flasher(BUTT_LED_YELLOW, 300, 300)};
 
 int activeLed = -1;
 
@@ -53,9 +55,26 @@ void butt3Click() {
 	processPush(3);
 }
 
+// BUTTON GAME END
+
+// RGB MIXER START
+int rgbMixerLeds[4] = {RGB_MIXER_LED_RED, RGB_MIXER_LED_GREEN, RGB_MIXER_LED_BLUE, RGB_MIXER_LED_WHITE};
+int rgbMixerPots[4] = {RGB_MIXER_POT_RED, RGB_MIXER_POT_GREEN, RGB_MIXER_POT_BLUE, RGB_MIXER_POT_WHITE};
+int rgbMixerLedValues[4] = {0, 0, 0, 0};
+
+void rgbMixerTick() {
+	for (int i = 0; i < 4; i++) {
+		rgbMixerLedValues[i] = analogRead(rgbMixerPots[i]);
+		analogWrite(rgbMixerLeds[i], rgbMixerLedValues[i]/4);
+	}
+}
+
+// RGB MIXER END
+
 void setup() {
 	Serial.begin(9600);
 
+	// Button game
 	for (int i = 0; i < 4; i++){
 		myButtons[i].setPressTicks(60);
 	}
@@ -66,11 +85,26 @@ void setup() {
 	myButtons[3].attachPress(butt3Click);
 
 	activeLed = turnOnRandomLed();
+
+	// RGB mixer
+	pinMode(RGB_MIXER_LED_RED, OUTPUT);
+	pinMode(RGB_MIXER_LED_GREEN, OUTPUT);
+	pinMode(RGB_MIXER_LED_BLUE, OUTPUT);
+	pinMode(RGB_MIXER_LED_WHITE, OUTPUT);
+
+	//pinMode(RGB_MIXER_POT_RED, INPUT);
+	//pinMode(RGB_MIXER_POT_GREEN, INPUT);
+	//pinMode(RGB_MIXER_POT_BLUE, INPUT);
+	//pinMode(RGB_MIXER_POT_WHITE, INPUT);
 }
 
 void loop() {
+	// Button game
 	for (int i = 0; i < 4; i++){
 		myButtons[i].tick();
 		myLeds[i].tick();
 	}
+
+	// RGB mixer
+	rgbMixerTick();
 }
