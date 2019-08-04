@@ -4,7 +4,7 @@
 // PIN DEFINITIONS
 // ---------------
 
-#define ADC_SEED_PIN A1
+#define ADC_SEED_PIN A4
 
 // Button game
 #define BUTT_LED_RED 24
@@ -19,12 +19,12 @@
 
 
 // RGB mixer
-#define RGB_MIXER_LED_RED 2
-#define RGB_MIXER_LED_GREEN 4
-#define RGB_MIXER_LED_BLUE 6
-#define RGB_MIXER_LED_WHITE 8
+#define RGB_MIXER_LED_BRIGHTNESS 30 // max 255
+
+#define RGB_MIXER_LED_DATA 2
+#define RGB_MIXER_LED_COUNT 8
 
 #define RGB_MIXER_POT_RED A0
-#define RGB_MIXER_POT_GREEN A2
-#define RGB_MIXER_POT_BLUE A4
-#define RGB_MIXER_POT_WHITE A6
+#define RGB_MIXER_POT_GREEN A1
+#define RGB_MIXER_POT_BLUE A2
+#define RGB_MIXER_POT_WHITE A3
