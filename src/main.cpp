@@ -64,6 +64,7 @@ int rgbMixerPotPosition = RGB_MIXER_POT_WHITE;
 int rgbMixerLedValues[3] = {0, 0, 0};
 int rgbMixerPotPositionValue = 0;
 bool updateStrip = false; // if values read are different from stored, then update
+long rgbBrightness = RGB_MIXER_LED_MAX_BRIGHTNESS;
 
 Adafruit_NeoPixel rgbStrip(RGB_MIXER_LED_COUNT, RGB_MIXER_LED_DATA, NEO_GRB + NEO_KHZ800);
 
@@ -91,7 +92,7 @@ bool readPotValues() {
 			rgbMixerLedValues[i] = actualLedValues[i];
 			rgbMixerPotPositionValue = actualPosValue;
 		}
-		debugPixels();
+		//debugPixels();
 		return true;
 	} else {
 		return false;
@@ -131,9 +132,13 @@ void setup() {
 	pinMode(RGB_MIXER_POT_BLUE, INPUT);
 	pinMode(RGB_MIXER_POT_WHITE, INPUT);
 
+	pinMode(AUTO_BRIGHTNESS_PIN, INPUT);
+	double photoresistorVal = analogRead(AUTO_BRIGHTNESS_PIN);
+	double newBrightness = RGB_MIXER_LED_MAX_BRIGHTNESS * photoresistorVal / 1023;
+
 	rgbStrip.begin();           // INITIALIZE NeoPixel strip object (REQUIRED)
 	rgbStrip.show();            // Turn OFF all pixels ASAP
-	rgbStrip.setBrightness(RGB_MIXER_LED_BRIGHTNESS); // Set BRIGHTNESS to about 1/5 (max = 255)
+	rgbStrip.setBrightness(newBrightness); // Set BRIGHTNESS to about 1/5 (max = 255)
 }
 
 void loop() {
